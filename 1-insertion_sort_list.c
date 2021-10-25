@@ -1,51 +1,49 @@
 #include "sort.h"
-
+#include <stdio.h>
 /**
- * insertion_sort_list - sorts a linked list ussing insertion sorting algorithm
- * @list: pointer to the head of the list
- * Return: void
- */
-
+ * insertion_sort_list - insertion sort algorithm for doubly linked list
+ * @list: pointer to array to sort
+*/
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *head = *list, *current, *tmp;
 
-	if (list == NULL || (*list) == NULL || head == NULL || head->next == NULL)
-		return;
+listint_t *node, *tmp, *next, *tmp_next, *tmp_prev;
+int i = 0;
 
-	head = head->next;
-	while (head != NULL)
+if (list == NULL || (*list)->next == NULL)
+	return;
+node = *list;
+node = node->next;
+while (node != NULL)
+{
+	tmp = node;
+	next = node->next;
+	tmp_next = tmp->next; /*Will be NULL for the last Node*/
+	tmp_prev = tmp->prev;
+
+	while (tmp->prev != NULL && tmp_prev->n > tmp->n)
 	{
-		current = head;
-		head = head->next;
-		tmp = current->prev;
-		while (current && tmp)
+		if (tmp_next != NULL)
+			tmp_next->prev = tmp_prev;
+		tmp_prev->next = tmp_next;
+		if (tmp_prev->prev == NULL)
 		{
-			if (current->n < tmp->n)
-			{
-				if (current->prev != NULL)
-				{
-					current->prev->next = current->next;
-				}
-				if (current->next != NULL)
-				{
-					current->next->prev = current->prev;
-				}
-				current->next = tmp;
-				if (tmp->prev)
-					tmp->prev->next = current;
-				current->prev = tmp->prev;
-				tmp->prev = current;
-				if (current->prev == NULL)
-				{
-					*list = current;
-					print_list(*list);
-					break;
-				}
-				tmp = current->prev;
-				print_list(*list);
-			} else
-				tmp = tmp->prev;
+			tmp_prev->prev = tmp;
+			*list = tmp;
+			tmp->prev = NULL;
 		}
+		else
+		{
+			tmp->prev = tmp_prev->prev;
+			tmp_prev->prev->next = tmp;
+			tmp_prev->prev = tmp;
+		}
+		tmp->next = tmp_prev;
+		tmp_prev = tmp->prev;
+		tmp_next = tmp->next;
+		print_list(*list);
 	}
+	node = next;
+	i++;
+}
 }
