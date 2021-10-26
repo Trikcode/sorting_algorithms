@@ -1,4 +1,9 @@
 #include "sort.h"
+
+/*prototypes. funcs() defined later in this file*/
+void sort_alg(int *arr, int left, int right, size_t size);
+int split(int *arr, int left, int right, size_t size);
+
 /**
   * quick_sort - quicksort algorithm
   * @array: array to be sorted
